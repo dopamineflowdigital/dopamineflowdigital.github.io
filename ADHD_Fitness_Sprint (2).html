@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E55A2B">
+<meta name="description" content="Interactive 30-day ADHD fitness planner. Done > Perfect.">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23E55A2B' width='192' height='192' rx='45'/><text x='96' y='120' font-size='100' font-weight='bold' text-anchor='middle' fill='%23FAFAF7'>🚀</text></svg>">
+<title>ADHD Planner: 30-Day Fitness Sprint | Done > Perfect</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ===== DEFAULT THEME (Coral) ===== */
+:root {
+  --bg: #FAFAF7;
+  --text: #0D0D0D;
+  --accent: #E55A2B;
+  --accent-dark: #D64618;
+  --accent-light: rgba(229, 90, 43, 0.1);
+  --border: rgba(229, 90, 43, 0.15);
+  --sidebar-bg: #2A2A27;
+  --sidebar-text: #FAFAF7;
+  --divider: rgba(229, 90, 43, 0.15);
+  --muted: #B0AFA8;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ===== THEME: LAVENDER ===== */
+body.theme-lavender {
+  --accent: #7C5BA3;
+  --accent-dark: #6B4A91;
+  --accent-light: rgba(124, 91, 163, 0.1);
+  --border: rgba(124, 91, 163, 0.15);
+  --divider: rgba(124, 91, 163, 0.15);
+  --sidebar-bg: #3E3548;
+}
+
+/* ===== THEME: SAGE GREEN ===== */
+body.theme-green {
+  --accent: #5B9A6B;
+  --accent-dark: #4A8659;
+  --accent-light: rgba(91, 154, 107, 0.1);
+  --border: rgba(91, 154, 107, 0.15);
+  --divider: rgba(91, 154, 107, 0.15);
+  --sidebar-bg: #3D4A3F;
+}
+
+/* ===== THEME: SKY BLUE ===== */
+body.theme-blue {
+  --accent: #4A90E2;
+  --accent-dark: #3A7BC8;
+  --accent-light: rgba(74, 144, 226, 0.1);
+  --border: rgba(74, 144, 226, 0.15);
+  --divider: rgba(74, 144, 226, 0.15);
+  --sidebar-bg: #334455;
+}
+
+/* ===== THEME: WARM PEACH ===== */
+body.theme-peach {
+  --accent: #E8A87C;
+  --accent-dark: #D6956A;
+  --accent-light: rgba(232, 168, 124, 0.1);
+  --border: rgba(232, 168, 124, 0.15);
+  --divider: rgba(232, 168, 124, 0.15);
+  --sidebar-bg: #4A3D33;
+}
+
+/* ===== THEME: MINT ===== */
+body.theme-mint {
+  --accent: #48B5A0;
+  --accent-dark: #38A38E;
+  --accent-light: rgba(72, 181, 160, 0.1);
+  --border: rgba(72, 181, 160, 0.15);
+  --divider: rgba(72, 181, 160, 0.15);
+  --sidebar-bg: #384844;
+}
+
+/* ===== THEME: SLATE BLUE ===== */
+body.theme-slate {
+  --accent: #556B7F;
+  --accent-dark: #445565;
+  --accent-light: rgba(85, 107, 127, 0.1);
+  --border: rgba(85, 107, 127, 0.15);
+  --divider: rgba(85, 107, 127, 0.15);
+  --sidebar-bg: #3E4A56;
+}
+
+html, body { height: 100%; }
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== HEADER ===== */
+.top-header {
+  background: linear-gradient(90deg, var(--bg) 0%, var(--accent-light) 50%, var(--bg) 100%);
+  padding: 16px 12px;
+  border-bottom: 2px solid var(--accent);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0D0D0D;
+  letter-spacing: -0.5px;
+}
+
+.header-date {
+  font-size: 16px;
+  color: #0D0D0D;
+  font-weight: 500;
+  flex: 1;
+  text-align: center;
+}
+
+.progress-counter {
+  font-size: 16px;
+  color: #0D0D0D;
+  font-weight: 700;
+  background: rgba(229, 90, 43, 0.1);
+  padding: 6px 12px;
+  border-radius: 6px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.header-title {
+  font-size: 16px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ===== HAMBURGER MENU (Mobile) ===== */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.sidebar.mobile-open {
+  left: 0;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+
+.sidebar-overlay.mobile-open {
+  display: block;
+}
+.theme-switcher {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.theme-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-btn:hover {
+  transform: scale(1.15);
+}
+
+.theme-btn.active {
+  border-color: var(--text);
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}
+
+/* Theme colors */
+.theme-coral { background: #E55A2B; }
+.theme-lavender { background: #7C5BA3; }
+.theme-green { background: #5B9A6B; }
+.theme-blue { background: #4A90E2; }
+.theme-peach { background: #E8A87C; }
+.theme-mint { background: #48B5A0; }
+.theme-slate { background: #556B7F; }
+
+/* ===== MAIN CONTAINER (sidebar + content) ===== */
+.container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 220px;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 20px 0;
+  overflow-y: auto;
+  border-right: 2px solid var(--accent);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.nav-section {
+  padding: 0 16px;
+}
+
+.nav-section h3 {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+.nav-item {
+  display: block;
+  padding: 11px 14px;
+  margin-bottom: 4px;
+  border-radius: 6px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  font-weight: 500;
+}
+
+.nav-item:hover {
+  background: rgba(229, 90, 43, 0.2);
+  border-left-color: var(--accent);
+  transform: translateX(2px);
+}
+
+.nav-item.active {
+  background: var(--accent);
+  color: var(--sidebar-bg);
+  font-weight: 600;
+  border-left-color: var(--accent);
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 40px;
+  background: linear-gradient(135deg, var(--bg) 0%, var(--accent-light) 2%, var(--bg) 100%);
+}
+
+/* ===== PAGE SECTIONS ===== */
+.page-section {
+  display: none;
+}
+
+.page-section.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===== COVER PAGE ===== */
+.cover {
+  text-align: center;
+  padding: 60px 40px;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(250, 250, 247, 1) 0%, rgba(229, 90, 43, 0.1) 50%, rgba(250, 250, 247, 1) 100%);
+  border-radius: 16px;
+  border: 2px solid var(--accent);
+  margin-bottom: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.cover h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.8px;
+}
+
+.cover h2 {
+  font-size: 24px;
+  color: #0D0D0D;
+  font-weight: 600;
+  margin-bottom: 20px;
+  letter-spacing: -0.3px;
+}
+
+.cover .subtitle {
+  font-size: 16px;
+  color: var(--text);
+  max-width: 600px;
+  line-height: 1.8;
+  font-weight: 500;
+  margin-bottom: 32px;
+}
+
+.quick-start-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'Manrope', sans-serif;
+}
+
+.quick-start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.quick-start-btn:active {
+  transform: translateY(0);
+}
+
+/* ===== SECTION CARDS ===== */
+.section-card {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+  border-left: 4px solid var(--accent);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.section-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.section-card h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+
+.section-card p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text);
+  margin-bottom: 18px;
+}
+
+/* ===== WEEK TRACKER ===== */
+.week-tracker {
+  background: white;
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 24px;
+  border: 2px solid var(--divider);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.week-header {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.week-dates {
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 24px;
+  opacity: 0.8;
+}
+
+.day-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.day-row:last-child {
+  border-bottom: none;
+}
+
+.day-checkbox {
+  width: 28px;
+  height: 28px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.day-checkbox:hover {
+  transform: scale(1.1);
+}
+
+.day-label {
+  min-width: 50px;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 16px;
+}
+
+.day-notes {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid var(--divider);
+  padding: 8px 12px;
+  font-size: 16px;
+  background: transparent;
+  resize: none;
+  min-height: 32px;
+  font-family: inherit;
+}
+
+.day-notes:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.progress-bar {
+  display: flex;
+  gap: 6px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid var(--divider);
+}
+
+.progress-day {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--divider);
+  border-radius: 4px;
+  background: transparent;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.progress-day.filled {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ===== AFFIRMATIONS ===== */
+.affirmation {
+  background: linear-gradient(135deg, rgba(229, 90, 43, 0.1) 0%, rgba(229, 90, 43, 0.05) 100%);
+  border-left: 4px solid var(--accent);
+  padding: 16px 20px;
+  margin: 16px 0;
+  border-radius: 8px;
+  font-style: italic;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.7;
+  font-family: 'Georgia', 'Garamond', serif;
+  font-weight: 500;
+}
+
+.affirmation::before {
+  content: "✓ ";
+  color: var(--accent);
+  font-weight: 700;
+  margin-right: 8px;
+  font-family: inherit;
+}
+
+/* ===== FORMS ===== */
+input[type="text"], textarea, input[type="date"], input[type="number"] {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--text);
+  margin: 10px 0 18px;
+  transition: border 0.3s;
+}
+
+input[type="text"]:focus, textarea:focus, input[type="date"]:focus, input[type="number"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+textarea {
+  background-image: 
+    linear-gradient(0deg, transparent 24%, rgba(229, 90, 43, 0.06) 25%, rgba(229, 90, 43, 0.06) 26%, transparent 27%, transparent 74%, rgba(229, 90, 43, 0.06) 75%, rgba(229, 90, 43, 0.06) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(229, 90, 43, 0.06) 25%, rgba(229, 90, 43, 0.06) 26%, transparent 27%, transparent 74%, rgba(229, 90, 43, 0.06) 75%, rgba(229, 90, 43, 0.06) 76%, transparent 77%, transparent);
+  background-size: 32px 32px;
+  background-position: 0 0;
+}
+
+.fillable {
+  margin: 18px 0;
+}
+
+.fillable label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 16px;
+}
+
+.reflection-question {
+  margin: 20px 0;
+}
+
+.reflection-question label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.reflection-question textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.hack-option {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-light);
+  padding: 16px;
+  margin: 14px 0;
+  border-radius: 8px;
+}
+
+.hack-option strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.hack-option ul {
+  margin-left: 20px;
+  padding: 8px 0;
+}
+
+.hack-option li {
+  margin: 6px 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ===== HEADINGS ===== */
+h1 { font-size: 36px; font-weight: 700; margin: 0 0 16px; }
+h2 { font-size: 28px; font-weight: 700; margin: 0 0 20px; }
+h3 { font-size: 18px; font-weight: 600; margin: 24px 0 14px; }
+p { margin: 0 0 16px; font-size: 16px; line-height: 1.8; }
+
+/* ===== MOBILE ===== */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 180px;
+  }
+  
+  .main-content {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .hamburger {
+    display: block;
+  }
+  
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    z-index: 100;
+    transition: left 0.3s ease;
+    border-right: none;
+    border-bottom: 2px solid var(--accent);
+    overflow-y: auto;
+    padding-top: 80px;
+  }
+  
+  .sidebar.mobile-open {
+    left: 0;
+  }
+  
+  .sidebar-overlay.mobile-open {
+    display: block;
+  }
+  
+  .sidebar-nav {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .nav-section {
+    padding: 0 16px;
+  }
+  
+  .nav-section h3 {
+    display: block;
+    margin-bottom: 12px;
+  }
+  
+  .nav-item {
+    padding: 12px 14px;
+    font-size: 16px;
+  }
+  
+  .main-content {
+    padding: 20px;
+  }
+  
+  .cover {
+    padding: 40px 20px;
+    min-height: 300px;
+  }
+  
+  .cover h1 {
+    font-size: 32px;
+  }
+  
+  .cover h2 {
+    font-size: 18px;
+  }
+  
+  .cover .subtitle {
+    font-size: 16px;
+  }
+  
+  .section-card {
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .section-card h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .section-card p {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  h3 {
+    font-size: 16px;
+  }
+  
+  .theme-switcher {
+    gap: 4px;
+  }
+  
+  .theme-btn {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .progress-counter {
+    font-size: 11px;
+    padding: 4px 8px;
+    min-width: auto;
+  }
+  
+  .quick-start-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  }
+  
+  .week-tracker {
+    padding: 16px;
+  }
+  
+  .day-row {
+    gap: 10px;
+  }
+  
+  .day-checkbox {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .day-notes {
+    font-size: 16px;
+    min-height: 80px;
+  }
+}
+
+@media print {
+  .top-header, .sidebar { display: none; }
+  .main-content { padding: 0; }
+}
+</style>
+</head>
+<body>
+<!-- PWA Service Worker -->
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js')
+    .then(reg => console.log('✓ PWA Ready'))
+    .catch(err => console.log('PWA registration failed'));
+}
+</script>
+
+<!-- ===== HEADER ===== -->
+<header class="top-header">
+  <button class="hamburger" id="hamburger">☰</button>
+  <div class="logo">🚀 DopamineFlowDigital</div>
+  <div class="header-date"></div>
+  <div class="progress-counter">
+    <span id="current-day">Day 1</span> / 30
+  </div>
+  <div class="theme-switcher">
+    <button class="theme-btn theme-coral active" data-theme="default" title="Coral"></button>
+    <button class="theme-btn theme-lavender" data-theme="lavender" title="Lavender"></button>
+    <button class="theme-btn theme-green" data-theme="green" title="Sage Green"></button>
+    <button class="theme-btn theme-blue" data-theme="blue" title="Sky Blue"></button>
+    <button class="theme-btn theme-peach" data-theme="peach" title="Warm Peach"></button>
+    <button class="theme-btn theme-mint" data-theme="mint" title="Mint"></button>
+    <button class="theme-btn theme-slate" data-theme="slate" title="Slate Blue"></button>
+  </div>
+</header>
+
+<!-- ===== MAIN CONTAINER ===== -->
+<div class="container">
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <!-- FOUNDATION -->
+      <div class="nav-section">
+        <h3>FOUNDATION</h3>
+        <a href="#" class="nav-item active" data-section="cover">🎯 Cover & Intro</a>
+        <a href="#" class="nav-item" data-section="why">💭 Why 30 Days?</a>
+        <a href="#" class="nav-item" data-section="challenge">✍️ Your Challenge</a>
+        <a href="#" class="nav-item" data-section="stuck">⚡ Stuck? Hacks</a>
+        <a href="#" class="nav-item" data-section="science">🧠 ADHD Science</a>
+      </div>
+      
+      <!-- YOUR 30 DAYS -->
+      <div class="nav-section">
+        <h3>YOUR 30 DAYS</h3>
+        <a href="#" class="nav-item" data-section="week1">🚀 Week 1</a>
+        <a href="#" class="nav-item" data-section="week2">💪 Week 2</a>
+        <a href="#" class="nav-item" data-section="week3">🌱 Week 3</a>
+        <a href="#" class="nav-item" data-section="week4">🏆 Week 4</a>
+      </div>
+      
+      <!-- REFLECT & GROW -->
+      <div class="nav-section">
+        <h3>REFLECT & GROW</h3>
+        <a href="#" class="nav-item" data-section="reflections">📝 Reflections</a>
+        <a href="#" class="nav-item" data-section="affirmations">❤️ Affirmations</a>
+        <a href="#" class="nav-item" data-section="missed">🔄 Missed Workout?</a>
+      </div>
+      
+      <!-- CELEBRATE -->
+      <div class="nav-section">
+        <h3>CELEBRATE</h3>
+        <a href="#" class="nav-item" data-section="wrapup">✨ Wrap-Up</a>
+        <a href="#" class="nav-item" data-section="back">📖 Back Cover</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
+    <!-- COVER PAGE -->
+    <section id="cover" class="page-section active">
+      <div class="cover">
+        <h1>ADHD Planner</h1>
+        <h2>30-Day Fitness Sprint</h2>
+        <p class="subtitle">Done > Perfect + Daily Dopamine<br>Zero Shame. You've Got This.</p>
+        <button class="quick-start-btn" id="quick-start-btn">🚀 Skip Intro, Start Now!</button>
+      </div>
+    </section>
+
+    <!-- WHY 30 DAYS -->
+    <section id="why" class="page-section">
+      <div class="section-card">
+        <h2>Why 30 Days?</h2>
+        <p>Your Brain Needs a Different Approach. You've tried fitness before. Started strong. Then somewhere along the way, it fell apart. That's not always laziness. If you have ADHD, your brain often struggles with rewards that feel too far away.</p>
+        
+        <h3>The Problem</h3>
+        <p>Your brain doesn't care much about 'getting fit in 3 months.' It cares about NOW. You may forget goals, but you remember experiences.</p>
+        
+        <h3>The Fix</h3>
+        <p>One checkbox per day = one small reward. In 30 days, you'll have something powerful: Proof that you can keep showing up. Ready? 💪</p>
+      </div>
+    </section>
+
+    <!-- CHALLENGE SETUP -->
+    <section id="challenge" class="page-section">
+      <div class="section-card">
+        <h2>Your Fitness Challenge</h2>
+        
+        <div class="fillable">
+          <label>My 30-Day Fitness Challenge is:</label>
+          <input type="text" id="field-challenge" placeholder="e.g., run 3 times a week">
+        </div>
+        
+        <div class="fillable">
+          <label>Why this matters to me:</label>
+          <textarea id="field-why" placeholder="e.g., I want to feel stronger"></textarea>
+        </div>
+        
+        <div class="fillable">
+          <label>My vision (what success looks like):</label>
+          <textarea id="field-vision" placeholder="e.g., I see myself running without stopping"></textarea>
+        </div>
+        
+        <div class="affirmation">That's it. You know what you want. Let's go.</div>
+      </div>
+    </section>
+
+    <!-- STUCK? EXECUTIVE DYSFUNCTION HACKS -->
+    <section id="stuck" class="page-section">
+      <div class="section-card">
+        <h2>Stuck Before Starting?</h2>
+        <p>Your ADHD brain needs a starter spark. You know WHAT to do. But can't START? That's not laziness. That's executive dysfunction. Pick ONE hack below. Then start your Day 1.</p>
+        
+        <div class="hack-option">
+          <strong>☐ OPTION 1: Movement Reset (5 minutes)</strong>
+          <ul>
+            <li>Take a quick walk, dance, jump, stretch</li>
+            <li><strong>WHY:</strong> Movement activates your brain's activation system</li>
+            <li>Then come back + open your Daily Tracker</li>
+          </ul>
+        </div>
+        
+        <div class="hack-option">
+          <strong>☐ OPTION 2: Dopamine Jolt (1 minute)</strong>
+          <ul>
+            <li>Cold water on wrists or face (shocking but fast)</li>
+            <li>Ice in mouth for 10 seconds (acute stimulus)</li>
+            <li><strong>WHY:</strong> Cold = automatic dopamine spike in ADHD brains</li>
+            <li>Then start with just 5 minutes of your goal</li>
+          </ul>
+        </div>
+        
+        <div class="hack-option">
+          <strong>☐ OPTION 3: Tiny Time Commitment (1 minute)</strong>
+          <ul>
+            <li>Set a timer: "I'll do this for just 1 minute"</li>
+            <li>Most likely: 1 minute becomes 10+ minutes</li>
+            <li><strong>WHY:</strong> No "forever" feeling = brain can start</li>
+            <li>After 1 minute, check the box. Victory.</li>
+          </ul>
+        </div>
+        
+        <div class="hack-option">
+          <strong>☐ OPTION 4: Accountability Spark (2 minutes)</strong>
+          <ul>
+            <li>Text a friend: "Starting my fitness sprint NOW"</li>
+            <li>Or say it out loud to someone</li>
+            <li><strong>WHY:</strong> External pressure activates executive function</li>
+            <li>Then start while momentum is on</li>
+          </ul>
+        </div>
+        
+        <div class="affirmation">You don't need willpower. You need a SPARK. You just picked yours above.</div>
+      </div>
+    </section>
+
+    <!-- ADHD BRAIN SCIENCE -->
+    <section id="science" class="page-section">
+      <div class="section-card">
+        <h2>How ADHD Affects Fitness</h2>
+        <p>Your brain isn't broken. It's wired differently. You've probably felt this before: you want to work out, you know you should work out, and somehow... you still don't start. That's often executive dysfunction. It's not just laziness – starting can genuinely feel harder.</p>
+        
+        <p>ADHD brains often respond better to immediate rewards than distant promises. Pick something your brain actually wants to come back to. You may forget goals, but you remember experiences.</p>
+        
+        <h3>The Dopamine Factor</h3>
+        <p>Your brain works on immediate rewards, not distant payoffs. One checkbox per day = one dopamine hit. After 7 days of hits, you're building a real pattern. After 30 days? You're not starting from zero anymore.</p>
+      </div>
+    </section>
+
+    <!-- WEEK 1 TRACKER -->
+    <section id="week1" class="page-section">
+      <div class="week-tracker">
+        <h2 class="week-header">🚀 WEEK 1</h2>
+        <p class="week-dates">Days 1-7</p>
+        
+        <div class="day-row">
+          <input type="checkbox" id="day1-check" class="day-checkbox" data-day="1">
+          <label class="day-label">Day 1</label>
+          <textarea id="field-day1" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day2-check" class="day-checkbox" data-day="2">
+          <label class="day-label">Day 2</label>
+          <textarea id="field-day2" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day3-check" class="day-checkbox" data-day="3">
+          <label class="day-label">Day 3</label>
+          <textarea id="field-day3" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day4-check" class="day-checkbox" data-day="4">
+          <label class="day-label">Day 4</label>
+          <textarea id="field-day4" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day5-check" class="day-checkbox" data-day="5">
+          <label class="day-label">Day 5</label>
+          <textarea id="field-day5" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day6-check" class="day-checkbox" data-day="6">
+          <label class="day-label">Day 6</label>
+          <textarea id="field-day6" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day7-check" class="day-checkbox" data-day="7">
+          <label class="day-label">Day 7</label>
+          <textarea id="field-day7" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        
+        <div class="progress-bar">
+          <div id="week1-day1" class="progress-day"></div>
+          <div id="week1-day2" class="progress-day"></div>
+          <div id="week1-day3" class="progress-day"></div>
+          <div id="week1-day4" class="progress-day"></div>
+          <div id="week1-day5" class="progress-day"></div>
+          <div id="week1-day6" class="progress-day"></div>
+          <div id="week1-day7" class="progress-day"></div>
+        </div>
+        
+        <div class="affirmation">7/7? Celebrate. 5/7? Still winning. You showed up.</div>
+      </div>
+    </section>
+
+    <!-- WEEK 2 TRACKER -->
+    <section id="week2" class="page-section">
+      <div class="week-tracker">
+        <h2 class="week-header">💪 WEEK 2</h2>
+        <p class="week-dates">Days 8-14</p>
+        
+        <div class="day-row">
+          <input type="checkbox" id="day8-check" class="day-checkbox" data-day="8">
+          <label class="day-label">Day 8</label>
+          <textarea id="field-day8" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day9-check" class="day-checkbox" data-day="9">
+          <label class="day-label">Day 9</label>
+          <textarea id="field-day9" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day10-check" class="day-checkbox" data-day="10">
+          <label class="day-label">Day 10</label>
+          <textarea id="field-day10" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day11-check" class="day-checkbox" data-day="11">
+          <label class="day-label">Day 11</label>
+          <textarea id="field-day11" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day12-check" class="day-checkbox" data-day="12">
+          <label class="day-label">Day 12</label>
+          <textarea id="field-day12" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day13-check" class="day-checkbox" data-day="13">
+          <label class="day-label">Day 13</label>
+          <textarea id="field-day13" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day14-check" class="day-checkbox" data-day="14">
+          <label class="day-label">Day 14</label>
+          <textarea id="field-day14" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        
+        <div class="progress-bar">
+          <div id="week2-day1" class="progress-day"></div>
+          <div id="week2-day2" class="progress-day"></div>
+          <div id="week2-day3" class="progress-day"></div>
+          <div id="week2-day4" class="progress-day"></div>
+          <div id="week2-day5" class="progress-day"></div>
+          <div id="week2-day6" class="progress-day"></div>
+          <div id="week2-day7" class="progress-day"></div>
+        </div>
+        
+        <div class="affirmation">Halfway there. And you're still going. That matters.</div>
+      </div>
+    </section>
+
+    <!-- WEEK 3 TRACKER -->
+    <section id="week3" class="page-section">
+      <div class="week-tracker">
+        <h2 class="week-header">🌱 WEEK 3</h2>
+        <p class="week-dates">Days 15-21</p>
+        
+        <div class="day-row">
+          <input type="checkbox" id="day15-check" class="day-checkbox" data-day="15">
+          <label class="day-label">Day 15</label>
+          <textarea id="field-day15" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day16-check" class="day-checkbox" data-day="16">
+          <label class="day-label">Day 16</label>
+          <textarea id="field-day16" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day17-check" class="day-checkbox" data-day="17">
+          <label class="day-label">Day 17</label>
+          <textarea id="field-day17" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day18-check" class="day-checkbox" data-day="18">
+          <label class="day-label">Day 18</label>
+          <textarea id="field-day18" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day19-check" class="day-checkbox" data-day="19">
+          <label class="day-label">Day 19</label>
+          <textarea id="field-day19" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day20-check" class="day-checkbox" data-day="20">
+          <label class="day-label">Day 20</label>
+          <textarea id="field-day20" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day21-check" class="day-checkbox" data-day="21">
+          <label class="day-label">Day 21</label>
+          <textarea id="field-day21" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        
+        <div class="progress-bar">
+          <div id="week3-day1" class="progress-day"></div>
+          <div id="week3-day2" class="progress-day"></div>
+          <div id="week3-day3" class="progress-day"></div>
+          <div id="week3-day4" class="progress-day"></div>
+          <div id="week3-day5" class="progress-day"></div>
+          <div id="week3-day6" class="progress-day"></div>
+          <div id="week3-day7" class="progress-day"></div>
+        </div>
+        
+        <div class="affirmation">You're so close. This is real.</div>
+      </div>
+    </section>
+
+    <!-- WEEK 4 TRACKER -->
+    <section id="week4" class="page-section">
+      <div class="week-tracker">
+        <h2 class="week-header">🏆 WEEK 4</h2>
+        <p class="week-dates">Days 22-30</p>
+        
+        <div class="day-row">
+          <input type="checkbox" id="day22-check" class="day-checkbox" data-day="22">
+          <label class="day-label">Day 22</label>
+          <textarea id="field-day22" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day23-check" class="day-checkbox" data-day="23">
+          <label class="day-label">Day 23</label>
+          <textarea id="field-day23" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day24-check" class="day-checkbox" data-day="24">
+          <label class="day-label">Day 24</label>
+          <textarea id="field-day24" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day25-check" class="day-checkbox" data-day="25">
+          <label class="day-label">Day 25</label>
+          <textarea id="field-day25" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day26-check" class="day-checkbox" data-day="26">
+          <label class="day-label">Day 26</label>
+          <textarea id="field-day26" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day27-check" class="day-checkbox" data-day="27">
+          <label class="day-label">Day 27</label>
+          <textarea id="field-day27" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day28-check" class="day-checkbox" data-day="28">
+          <label class="day-label">Day 28</label>
+          <textarea id="field-day28" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day29-check" class="day-checkbox" data-day="29">
+          <label class="day-label">Day 29</label>
+          <textarea id="field-day29" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        <div class="day-row">
+          <input type="checkbox" id="day30-check" class="day-checkbox" data-day="30">
+          <label class="day-label">Day 30</label>
+          <textarea id="field-day30" class="day-notes" placeholder="Notes..."></textarea>
+        </div>
+        
+        <div class="progress-bar">
+          <div id="week4-day1" class="progress-day"></div>
+          <div id="week4-day2" class="progress-day"></div>
+          <div id="week4-day3" class="progress-day"></div>
+          <div id="week4-day4" class="progress-day"></div>
+          <div id="week4-day5" class="progress-day"></div>
+          <div id="week4-day6" class="progress-day"></div>
+          <div id="week4-day7" class="progress-day"></div>
+          <div id="week4-day8" class="progress-day"></div>
+          <div id="week4-day9" class="progress-day"></div>
+        </div>
+        
+        <div class="affirmation">You DID this. No shame in the gaps. You kept going.</div>
+      </div>
+    </section>
+
+    <!-- REFLECTIONS -->
+    <section id="reflections" class="page-section">
+      <div class="section-card">
+        <h2>Weekly Reflections</h2>
+        
+        <h3>Week 1: What went better than you thought it would?</h3>
+        <textarea id="field-ref1" placeholder="Write here..."></textarea>
+        
+        <h3>Week 2: When things got harder, what kept you going?</h3>
+        <textarea id="field-ref2" placeholder="Write here..."></textarea>
+        
+        <h3>Week 3: What surprised you about the person you're becoming?</h3>
+        <textarea id="field-ref3" placeholder="Write here..."></textarea>
+        
+        <h3>Week 4: What part of yourself are you proud of today?</h3>
+        <textarea id="field-ref4" placeholder="Write here..."></textarea>
+      </div>
+    </section>
+
+    <!-- AFFIRMATIONS -->
+    <section id="affirmations" class="page-section">
+      <div class="section-card">
+        <h2>Anti-Anxiety Affirmations</h2>
+        <p>Copy + use anytime. No shame in needing them.</p>
+        
+        <div class="affirmation">I'm not starting over. I'm continuing.</div>
+        <div class="affirmation">Missing one day doesn't erase everything I've already done.</div>
+        <div class="affirmation">I don't need to earn rest. Rest is part of taking care of myself.</div>
+        <div class="affirmation">I don't need permission to take care of myself.</div>
+        <div class="affirmation">I'm doing this for me — not for Instagram, not for likes, not for anyone else's expectations.</div>
+        <div class="affirmation">My body is not a project to fix.</div>
+        <div class="affirmation">Small steps still move me forward.</div>
+        <div class="affirmation">I'm not broken. My brain just works differently.</div>
+        <div class="affirmation">Progress doesn't move in a straight line, and that's okay.</div>
+        <div class="affirmation">Today I did what I could, and that still counts.</div>
+        <div class="affirmation">I don't have to be perfect for it to matter.</div>
+        <div class="affirmation">One hard day doesn't erase my progress.</div>
+        <div class="affirmation">I deserve to feel strong and good in my own body.</div>
+        <div class="affirmation">The promises I make to myself matter, even when nobody is watching.</div>
+      </div>
+    </section>
+
+    <!-- IF YOU MISSED A WORKOUT -->
+    <section id="missed" class="page-section">
+      <div class="section-card">
+        <h2>If You Missed a Workout</h2>
+        <p>Here are 10 gentle ways to reconnect. Pick ONE. That counts as today.</p>
+        
+        <div class="hack-option">
+          <strong>1. Dance (any song, any length)</strong>
+          <p>Put on your favorite song. Move however feels good. This counts. Movement is movement.</p>
+        </div>
+        
+        <div class="hack-option">
+          <strong>2. Do chores in workout clothes</strong>
+          <p>Wear your gym clothes while cleaning, cooking, or doing anything else. Your body is moving. Your brain registers effort.</p>
+        </div>
+        
+        <div class="hack-option">
+          <strong>3. Take a walk (no speed goal)</strong>
+          <p>Just walk. Slow is perfect. 5 minutes is enough. Fresh air counts.</p>
+        </div>
+        
+        <div class="hack-option">
+          <strong>4. Do 10 squats (or 3, or 5)</strong>
+          <p>Literally just 10 bodyweight squats. Sounds small. It's not. Your brain will remember you tried.</p>
+        </div>
+        
+        <div class="hack-option">
+          <strong>5. Plank (or wall push-up)</strong>
+          <p>Hold a plank for 20 seconds. Or do wall push-ups. Strength counts. Even small.</p>
+        </div>
+        
+        <div class="hack-option">
+          <strong>6. Stretch (10 minutes)</strong>
+          <p>YouTube has thousands of options. Pick one. Gentle counts. You're still moving.</p>
+        </div>
+        
+        <div class="hack-option">
+          <strong>7. Take the stairs</strong>
+          <p>Going somewhere? Take the stairs instead. That's your workout today.</p>
+        </div>
+        
+        <div class="hack-option">
+          <strong>8. Do arm circles + leg lifts</strong>
+          <p>Stand up. 20 arm circles each way. 10 leg lifts on each side. 2 minutes. Done.</p>
+        </div>
+        
+        <div class="hack-option">
+          <strong>9. Follow a 5-minute YouTube workout</strong>
+          <p>Search "5-minute workout" and pick any video. Commit to just 5 minutes. You can do 5.</p>
+        </div>
+        
+        <div class="hack-option">
+          <strong>10. Just show up (literally stand there)</strong>
+          <p>If nothing else: put on workout clothes, stand in your workout space, and breathe. You showed up. That's the first step. Tomorrow will be easier.</p>
+        </div>
+        
+        <div class="affirmation">If you've checked off at least one of these, today counts as a win. Move on. Rest is a full day of activity.</div>
+      </div>
+    </section>
+
+    <!-- WRAP-UP -->
+    <section id="wrapup" class="page-section">
+      <div class="section-card">
+        <h2>You Did It (Or You Showed Up)</h2>
+        
+        <div class="fillable">
+          <label>Days completed:</label>
+          <div id="days-completed-display" style="font-size: 32px; font-weight: 700; color: var(--accent); padding: 12px 0;">0 / 30</div>
+        </div>
+        
+        <div class="reflection-question">
+          <label>One thing I'm most proud of:</label>
+          <textarea id="field-proud" placeholder="Write here..."></textarea>
+        </div>
+        
+        <div class="reflection-question">
+          <label>What I'm taking into my next 30 days:</label>
+          <textarea id="field-next" placeholder="Write here..."></textarea>
+        </div>
+        
+        <div class="affirmation">You're not back to zero. You're building. Keep going.</div>
+      </div>
+    </section>
+
+    <!-- BACK COVER -->
+    <section id="back" class="page-section">
+      <div class="section-card">
+        <h2>What's Next?</h2>
+        <p>Three sprints I want to try:</p>
+        
+        <div class="fillable">
+          <input type="text" id="field-next1" placeholder="1. _______________">
+        </div>
+        <div class="fillable">
+          <input type="text" id="field-next2" placeholder="2. _______________">
+        </div>
+        <div class="fillable">
+          <input type="text" id="field-next3" placeholder="3. _______________">
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+// ===== PREVENT AUTO-ZOOM ON INPUT FOCUS (iOS Safari) =====
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('focus', () => {
+    // Prevent viewport from zooming on input focus
+    const viewport = document.querySelector('meta[name="viewport"]');
+    viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
+  });
+  
+  el.addEventListener('blur', () => {
+    // Restore normal viewport after input loses focus
+    const viewport = document.querySelector('meta[name="viewport"]');
+    viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+  });
+});
+
+// ===== HAMBURGER MENU (Mobile) =====
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.querySelector('.sidebar');
+const overlay = document.getElementById('sidebar-overlay');
+
+// Only run mobile menu code if elements exist
+if (hamburger && sidebar && overlay) {
+  hamburger.addEventListener('click', () => {
+    sidebar.classList.toggle('mobile-open');
+    overlay.classList.toggle('mobile-open');
+  });
+
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('mobile-open');
+    overlay.classList.remove('mobile-open');
+  });
+
+  // Close menu when nav item is clicked
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      sidebar.classList.remove('mobile-open');
+      overlay.classList.remove('mobile-open');
+    });
+  });
+}
+
+// ===== UPDATE DATE IN HEADER =====
+function updateHeaderDate() {
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+  const today = new Date();
+  const dayName = days[today.getDay()];
+  const date = today.getDate();
+  const monthName = months[today.getMonth()];
+  const year = today.getFullYear();
+  
+  const dateString = `${dayName}, ${date} ${monthName}`;
+  document.querySelector('.header-date').textContent = dateString;
+}
+
+// Navigation Handler
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    // Remove active from all
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    
+    // Add active to clicked
+    item.classList.add('active');
+    const sectionId = item.getAttribute('data-section');
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+  });
+});
+
+// ===== THEME SWITCHER =====
+const themeMap = {
+  'default': '',
+  'lavender': 'theme-lavender',
+  'green': 'theme-green',
+  'blue': 'theme-blue',
+  'peach': 'theme-peach',
+  'mint': 'theme-mint',
+  'slate': 'theme-slate'
+};
+
+function setTheme(themeName) {
+  // Remove all theme classes
+  Object.values(themeMap).forEach(className => {
+    if (className) document.body.classList.remove(className);
+  });
+  
+  // Add selected theme
+  if (themeMap[themeName]) {
+    document.body.classList.add(themeMap[themeName]);
+  }
+  
+  // Update buttons
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.getAttribute('data-theme') === themeName) {
+      btn.classList.add('active');
+    }
+  });
+  
+  // Save to localStorage
+  localStorage.setItem('adhd_planner_theme', themeName);
+}
+
+// Theme button listeners
+document.querySelectorAll('.theme-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const themeName = btn.getAttribute('data-theme');
+    setTheme(themeName);
+  });
+});
+
+// Load saved theme on page load
+window.addEventListener('load', () => {
+  const savedTheme = localStorage.getItem('adhd_planner_theme') || 'default';
+  setTheme(savedTheme);
+  loadData();
+  updateHeaderDate();
+});
+
+// Sync checkboxes with progress bars
+document.querySelectorAll('.day-checkbox').forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    const dayNum = parseInt(checkbox.getAttribute('data-day'));
+    const weekNum = Math.ceil(dayNum / 7);
+    const dayInWeek = ((dayNum - 1) % 7) + 1;
+    const progressElement = document.getElementById(`week${weekNum}-day${dayInWeek}`);
+    
+    if (progressElement) {
+      if (checkbox.checked) {
+        progressElement.classList.add('filled');
+      } else {
+        progressElement.classList.remove('filled');
+      }
+    }
+    
+    saveData();
+  });
+});
+
+// Auto-save to localStorage
+function saveData() {
+  const data = {};
+  document.querySelectorAll('input, textarea').forEach(el => {
+    if (el.id) {
+      data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+    }
+  });
+  localStorage.setItem('adhd_planner_data', JSON.stringify(data));
+}
+
+function loadData() {
+  const saved = localStorage.getItem('adhd_planner_data');
+  if (saved) {
+    const data = JSON.parse(saved);
+    Object.keys(data).forEach(key => {
+      const el = document.getElementById(key);
+      if (el) {
+        if (el.type === 'checkbox') {
+          el.checked = data[key];
+          // Sync progress bars
+          el.dispatchEvent(new Event('change'));
+        } else {
+          el.value = data[key];
+        }
+      }
+    });
+  }
+}
+
+// Save on input/change
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('change', saveData);
+  el.addEventListener('input', saveData);
+});
+
+// ===== PROGRESS TRACKING (COUNT BY CHECKED BOXES) =====
+function updateProgressCounter() {
+  // Count all checked checkboxes in daily trackers
+  const checkedBoxes = document.querySelectorAll('.page-section.active input[type="checkbox"]:checked').length;
+  
+  // Also count from all sections
+  const totalChecked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+  
+  if (totalChecked === 0) {
+    document.getElementById('current-day').textContent = 'Day 0';
+  } else if (totalChecked > 30) {
+    document.getElementById('current-day').textContent = 'Day 30';
+  } else {
+    document.getElementById('current-day').textContent = `Day ${totalChecked}`;
+  }
+}
+
+// ===== AUTO-UPDATE DAYS COMPLETED =====
+function updateDaysCompleted() {
+  // Count only .day-checkbox elements (not other checkboxes)
+  const totalDays = document.querySelectorAll('.day-checkbox:checked').length;
+  const daysDisplay = document.getElementById('days-completed-display');
+  
+  if (daysDisplay) {
+    daysDisplay.textContent = `${totalDays} / 30`;
+  }
+}
+
+// Update progress on load
+updateProgressCounter();
+updateDaysCompleted();
+
+// ===== QUICK START BUTTON =====
+const quickStartBtn = document.getElementById('quick-start-btn');
+if (quickStartBtn) {
+  quickStartBtn.addEventListener('click', () => {
+    // Hide all sections
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    
+    // Show week1
+    const week1 = document.getElementById('week1');
+    if (week1) {
+      week1.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+    
+    // Update sidebar
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    const week1Link = document.querySelector('[data-section="week1"]');
+    if (week1Link) week1Link.classList.add('active');
+  });
+}
+
+// ===== CELEBRATION MESSAGES =====
+const celebrations = [
+  '🎉 You did it!',
+  '💪 Keep crushing it!',
+  '🔥 Streak building!',
+  '⭐ You are AWESOME!',
+  '🚀 Unstoppable energy!',
+  '✨ This is YOUR moment!',
+  '🎯 Nailed it!',
+  '💚 Loving the effort!'
+];
+
+function showCelebration(checkbox) {
+  // Update progress counter ВСЕГДА (check or uncheck)
+  updateProgressCounter();
+  
+  if (checkbox.checked) {
+    const message = celebrations[Math.floor(Math.random() * celebrations.length)];
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 40px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      animation: slideIn 0.3s ease;
+      z-index: 1000;
+      font-family: 'Manrope', sans-serif;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 2000);
+  }
+}
+
+// Add celebration to checkboxes
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+  checkbox.addEventListener('change', function() {
+    updateDaysCompleted(); // Auto-update days completed display
+    if (this.closest('.daily-items') || this.closest('input[type="checkbox"]')) {
+      showCelebration(this);
+    }
+  });
+});
+
+// CSS animations for celebrations
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOut {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+  }
+`;
+document.head.appendChild(style);
+
+</script>
+
+</body>
+</html>
